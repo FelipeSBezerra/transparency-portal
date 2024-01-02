@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    container_name: "postgres"
+    environment:
+      - POSTGRES_DB=transparency_portal
+      - POSTGRES_USER=felipe
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
