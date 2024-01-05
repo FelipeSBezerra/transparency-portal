@@ -1,5 +1,6 @@
 package com.devfelipe.transparencyportal.employee.domain.model;
 
+import com.devfelipe.transparencyportal.common.domain.model.BaseModel;
 import com.devfelipe.transparencyportal.employee.domain.enums.EmploymentType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -17,8 +18,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Employee implements Serializable {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Employee extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
