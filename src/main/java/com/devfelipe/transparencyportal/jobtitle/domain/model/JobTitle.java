@@ -1,11 +1,10 @@
 package com.devfelipe.transparencyportal.jobtitle.domain.model;
 
 import com.devfelipe.transparencyportal.common.domain.model.BaseModel;
+import com.devfelipe.transparencyportal.employee.domain.model.Employee;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -13,6 +12,8 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -32,6 +33,10 @@ public class JobTitle extends BaseModel implements Serializable {
 
     @NotBlank(message = "The \"name\" field cannot be empty")
     private String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "jobTitle")
+    private Set<Employee> employees = new HashSet<>();
 
 
     @NotNull(message = "The \"createdAt\" field cannot be empty")

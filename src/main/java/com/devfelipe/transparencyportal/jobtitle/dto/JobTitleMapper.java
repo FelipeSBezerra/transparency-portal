@@ -20,18 +20,11 @@ public class JobTitleMapper implements BaseMapper<JobTitle, JobTitleResponseDto,
         );
     }
 
-    @Override
-    public JobTitle mapToEntityClass(JobTitleRequestDto jobTitleRequestDto) {
+    public JobTitle mapToJobTitle(JobTitleRequestDto jobTitleRequestDto) {
         return JobTitle.builder()
                 .name(jobTitleRequestDto.name())
+                .createdAt(Instant.now())
                 .build();
-    }
-
-    @Override
-    public JobTitle updateFromDto(JobTitle entity, JobTitleRequestDto jobTitleRequestDto) {
-        entity.setName(jobTitleRequestDto.name());
-        entity.setUpdatedAt(Instant.now());
-        return entity;
     }
 
 }
