@@ -8,11 +8,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType,RequestDto, ResponseDto> implements BaseService<EntityIdType, RequestDto, ResponseDto>{
+public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType,RequestDto, ResponseDto> implements BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto>{
 
     private final Class<EntityClass> entityClass;
     private final JpaRepository<EntityClass, EntityIdType> repository;
@@ -35,21 +34,25 @@ public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType
 
     @Override
     public ResponseDto findById(EntityIdType entityId) {
-        return baseMapper.mapToResponseDto(_findById(entityId));
+        return baseMapper.mapToResponseDto(findByIdReturnsEntity(entityId));
+    }
+
+    @Override
+    public EntityClass findByIdReturnsEntity(EntityIdType entityId) {
+        return _getRepository().findById(entityId).orElseThrow(() -> new ResourceNotFoundException(
+                String.format("There is no resource of type %s with the id %s in the database.", this.entityClass.getSimpleName(), entityId.toString())));
     }
 
     @Override
     public ResponseDto create(RequestDto requestDto) {
-        EntityClass newEntity = baseMapper.mapToEntityClass(requestDto);
-        newEntity.setCreatedAt(Instant.now());
+        EntityClass newEntity = _createEntityFromDto(requestDto);
         EntityClass savedEntity = _getRepository().save(newEntity);
         return baseMapper.mapToResponseDto(savedEntity);
     }
 
     @Override
     public ResponseDto update(EntityIdType entityId, RequestDto requestDto) {
-        EntityClass savedEntity = _findById(entityId);
-        EntityClass updatedEntity = baseMapper.updateFromDto(savedEntity, requestDto);
+        EntityClass updatedEntity = _updateEntityFromDto(entityId, requestDto);
         return baseMapper.mapToResponseDto(_getRepository().save(updatedEntity));
     }
 
@@ -62,12 +65,10 @@ public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType
         _getRepository().deleteById(entityId);
     }
 
+    protected abstract EntityClass _createEntityFromDto(RequestDto requestDto);
+    protected abstract EntityClass _updateEntityFromDto(EntityIdType entityId, RequestDto requestDto);
     private JpaRepository<EntityClass, EntityIdType> _getRepository() {
         return this.repository;
     }
 
-    private EntityClass _findById(EntityIdType entityId) {
-        return _getRepository().findById(entityId).orElseThrow(() -> new ResourceNotFoundException(
-                String.format("There is no resource of type %s with the id %s in the database.", this.entityClass.getSimpleName(), entityId.toString())));
-    }
 }

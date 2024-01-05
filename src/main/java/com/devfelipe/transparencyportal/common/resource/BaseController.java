@@ -11,11 +11,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-public abstract class BaseController<EntityIdType, RequestDto, ResponseDto extends BaseResponseDto> {
+public abstract class BaseController<EntityClass, EntityIdType, RequestDto, ResponseDto extends BaseResponseDto> {
 
-    private final BaseService<EntityIdType, RequestDto, ResponseDto> baseService;
+    private final BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto> baseService;
 
-    protected BaseController(BaseService<EntityIdType, RequestDto, ResponseDto> baseService) {
+    protected BaseController(BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto> baseService) {
         this.baseService = baseService;
     }
 
