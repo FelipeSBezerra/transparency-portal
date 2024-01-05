@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 public record EmployeeRequestDto(
@@ -23,5 +22,8 @@ public record EmployeeRequestDto(
         LocalDate employmentEndDate,
 
         @NotNull(message = "The \"weeklyWorkHours\" field cannot be empty")
-        Integer weeklyWorkHours
+        Integer weeklyWorkHours,
+
+        @NotNull(message = "The \"jobTitleId\" field cannot be empty")
+        Integer jobTitleId
 ) {}

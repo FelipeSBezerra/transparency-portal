@@ -2,6 +2,7 @@ package com.devfelipe.transparencyportal.employee.domain.model;
 
 import com.devfelipe.transparencyportal.common.domain.model.BaseModel;
 import com.devfelipe.transparencyportal.employee.domain.enums.EmploymentType;
+import com.devfelipe.transparencyportal.jobtitle.domain.model.JobTitle;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +46,11 @@ public class Employee extends BaseModel implements Serializable {
 
     @NotNull(message = "The \"weeklyWorkHours\" field cannot be empty")
     private Integer weeklyWorkHours;
+
+    @NotNull(message = "The \"jobTitle\" field cannot be empty")
+    @ManyToOne
+    @JoinColumn(name = "jobTitleId")
+    private JobTitle jobTitle;
 
     @NotNull(message = "The \"createdAt\" field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")

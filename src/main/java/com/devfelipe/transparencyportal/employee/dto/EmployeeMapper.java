@@ -2,6 +2,7 @@ package com.devfelipe.transparencyportal.employee.dto;
 
 import com.devfelipe.transparencyportal.common.dto.BaseMapper;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
+import com.devfelipe.transparencyportal.jobtitle.domain.model.JobTitle;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -9,6 +10,7 @@ import java.time.Instant;
 @Component
 public class EmployeeMapper implements BaseMapper<Employee, EmployeeResponseDto, EmployeeRequestDto> {
 
+    @Override
     public EmployeeResponseDto mapToResponseDto(Employee employee) {
         return new EmployeeResponseDto(
                 employee.getEmployeeId(),
@@ -17,31 +19,21 @@ public class EmployeeMapper implements BaseMapper<Employee, EmployeeResponseDto,
                 employee.getEmploymentStartDate(),
                 employee.getEmploymentEndDate(),
                 employee.getWeeklyWorkHours(),
+                employee.getJobTitle(),
                 employee.getCreatedAt(),
                 employee.getUpdatedAt()
         );
     }
 
-    @Override
-    public Employee mapToEntityClass(EmployeeRequestDto employeeRequestDto) {
+    public Employee mapToEmployee(EmployeeRequestDto employeeRequestDto, JobTitle jobTitle) {
         return Employee.builder()
                 .name(employeeRequestDto.name())
                 .employmentType(employeeRequestDto.employmentType())
                 .employmentStartDate(employeeRequestDto.employmentStartDate())
                 .employmentEndDate(employeeRequestDto.employmentEndDate())
                 .weeklyWorkHours(employeeRequestDto.weeklyWorkHours())
+                .jobTitle(jobTitle)
+                .createdAt(Instant.now())
                 .build();
     }
-
-    @Override
-    public Employee updateFromDto(Employee entity, EmployeeRequestDto employeeRequestDto) {
-        entity.setName(employeeRequestDto.name());
-        entity.setEmploymentType(employeeRequestDto.employmentType());
-        entity.setEmploymentStartDate(employeeRequestDto.employmentStartDate());
-        entity.setEmploymentEndDate(employeeRequestDto.employmentEndDate());
-        entity.setWeeklyWorkHours(employeeRequestDto.weeklyWorkHours());
-        entity.setUpdatedAt(Instant.now());
-        return entity;
-    }
-
 }
