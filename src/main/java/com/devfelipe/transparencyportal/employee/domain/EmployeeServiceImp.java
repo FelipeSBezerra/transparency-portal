@@ -1,5 +1,7 @@
 package com.devfelipe.transparencyportal.employee.domain;
 
+import com.devfelipe.transparencyportal.assignment.domain.AssignmentService;
+import com.devfelipe.transparencyportal.assignment.domain.model.Assignment;
 import com.devfelipe.transparencyportal.common.domain.BaseServiceImp;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeMapper;
@@ -19,20 +21,23 @@ public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, Employ
 
     private final JobTitleService jobTitleService;
     private final FundingSourceService fundingSourceService;
+    private final AssignmentService assignmentService;
     private final EmployeeMapper employeeMapper;
 
-    protected EmployeeServiceImp(final EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, JobTitleService jobTitleService, FundingSourceService fundingSourceService) {
+    protected EmployeeServiceImp(final EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, JobTitleService jobTitleService, FundingSourceService fundingSourceService, AssignmentService assignmentService) {
         super(Employee.class, employeeRepository, employeeMapper);
         this.jobTitleService = jobTitleService;
         this.employeeMapper = employeeMapper;
         this.fundingSourceService = fundingSourceService;
+        this.assignmentService = assignmentService;
     }
 
     @Override
     protected Employee _createEntityFromDto(EmployeeRequestDto employeeRequestDto) {
         JobTitle jobTitle = jobTitleService.findByIdReturnsEntity(employeeRequestDto.jobTitleId());
         FundingSource fundingSource = fundingSourceService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
-        return employeeMapper.mapToEmployee(employeeRequestDto, jobTitle, fundingSource);
+        Assignment assignment = assignmentService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
+        return employeeMapper.mapToEmployee(employeeRequestDto, jobTitle, fundingSource, assignment);
     }
 
     @Override
@@ -40,11 +45,12 @@ public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, Employ
         Employee savedEmployee = this.findByIdReturnsEntity(entityId);
         JobTitle jobTitle = jobTitleService.findByIdReturnsEntity(employeeRequestDto.jobTitleId());
         FundingSource fundingSource = fundingSourceService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
-        _updateData(savedEmployee, employeeRequestDto, jobTitle, fundingSource);
+        Assignment assignment = assignmentService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
+        _updateData(savedEmployee, employeeRequestDto, jobTitle, fundingSource, assignment);
         return savedEmployee;
     }
 
-    private void _updateData(Employee savedEmployee, EmployeeRequestDto employeeRequestDto, JobTitle jobTitle, FundingSource fundingSource) {
+    private void _updateData(Employee savedEmployee, EmployeeRequestDto employeeRequestDto, JobTitle jobTitle, FundingSource fundingSource, Assignment assignment) {
         savedEmployee.setName(employeeRequestDto.name());
         savedEmployee.setEmploymentType(employeeRequestDto.employmentType());
         savedEmployee.setEmploymentStartDate(employeeRequestDto.employmentStartDate());
@@ -52,6 +58,7 @@ public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, Employ
         savedEmployee.setWeeklyWorkHours(employeeRequestDto.weeklyWorkHours());
         savedEmployee.setJobTitle(jobTitle);
         savedEmployee.setFundingSource(fundingSource);
+        savedEmployee.setAssignment(assignment);
         savedEmployee.setUpdatedAt(Instant.now());
     }
 }

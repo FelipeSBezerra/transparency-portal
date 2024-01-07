@@ -1,5 +1,6 @@
 package com.devfelipe.transparencyportal.employee.domain.model;
 
+import com.devfelipe.transparencyportal.assignment.domain.model.Assignment;
 import com.devfelipe.transparencyportal.common.domain.model.BaseModel;
 import com.devfelipe.transparencyportal.employee.domain.enums.EmploymentType;
 import com.devfelipe.transparencyportal.fundingsource.domain.model.FundingSource;
@@ -57,6 +58,11 @@ public class Employee extends BaseModel implements Serializable {
     @ManyToOne
     @JoinColumn(name = "fundingSourceId")
     private FundingSource fundingSource;
+
+    @NotNull(message = "The \"assignment\" field cannot be empty")
+    @ManyToOne
+    @JoinColumn(name = "assignmentId")
+    private Assignment assignment;
 
     @NotNull(message = "The \"createdAt\" field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")

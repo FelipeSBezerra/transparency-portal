@@ -28,5 +28,8 @@ public record EmployeeRequestDto(
         Integer jobTitleId,
 
         @NotNull(message = "The \"fundingSourceId\" field cannot be empty")
-        Integer fundingSourceId
+        Integer fundingSourceId,
+
+        @NotNull(message = "The \"assignmentId\" field cannot be empty")
+        Integer assignmentId
 ) {}

@@ -1,5 +1,6 @@
 package com.devfelipe.transparencyportal.employee.dto;
 
+import com.devfelipe.transparencyportal.assignment.domain.model.Assignment;
 import com.devfelipe.transparencyportal.common.dto.BaseResponseDto;
 import com.devfelipe.transparencyportal.employee.domain.enums.EmploymentType;
 import com.devfelipe.transparencyportal.fundingsource.domain.model.FundingSource;
@@ -18,6 +19,7 @@ public record EmployeeResponseDto(
         Integer weeklyWorkHours,
         JobTitle jobTitle,
         FundingSource fundingSource,
+        Assignment assignment,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
         Instant createdAt,
