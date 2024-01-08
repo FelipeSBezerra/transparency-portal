@@ -1,5 +1,6 @@
 package com.devfelipe.transparencyportal.compensation.domain.model;
 
+import com.devfelipe.transparencyportal.common.converter.YearMonthConverter;
 import com.devfelipe.transparencyportal.common.domain.model.BaseModel;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -37,6 +38,8 @@ public class Compensation extends BaseModel implements Serializable {
 
     @NotNull(message = "The \"compensationReferenceYearMonth\" field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
+    @Convert(converter = YearMonthConverter.class)
+    @Column(columnDefinition = "VARCHAR(7)")
     private YearMonth compensationReferenceYearMonth;
 
     @NotNull(message = "The \"baseSalary\" field cannot be empty")
