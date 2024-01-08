@@ -67,7 +67,7 @@ public class Employee extends BaseModel implements Serializable {
     @JoinColumn(name = "assignmentId")
     private Assignment assignment;
 
-    @OneToMany(mappedBy = "compensationId")
+    @OneToMany(mappedBy = "employee")
     private Set<Compensation> compensations = new HashSet<>();
 
     @NotNull(message = "The \"createdAt\" field cannot be empty")
