@@ -2,6 +2,7 @@ package com.devfelipe.transparencyportal.assignment.dto;
 
 import com.devfelipe.transparencyportal.assignment.domain.model.Assignment;
 import com.devfelipe.transparencyportal.common.dto.BaseMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;

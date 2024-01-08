@@ -3,6 +3,7 @@ package com.devfelipe.transparencyportal.employee.domain;
 import com.devfelipe.transparencyportal.assignment.domain.AssignmentService;
 import com.devfelipe.transparencyportal.assignment.domain.model.Assignment;
 import com.devfelipe.transparencyportal.common.domain.BaseServiceImp;
+import com.devfelipe.transparencyportal.common.domain.exception.DataIntegrityViolationException;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeMapper;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeRequestDto;
@@ -48,6 +49,14 @@ public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, Employ
         Assignment assignment = assignmentService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
         _updateData(savedEmployee, employeeRequestDto, jobTitle, fundingSource, assignment);
         return savedEmployee;
+    }
+
+    @Override
+    protected void _checkDataIntegrityViolationForDeletion(Integer entityId) {
+        if (!this.findByIdReturnsEntity(entityId).getCompensations().isEmpty()) {
+            throw new DataIntegrityViolationException(
+                    String.format("The employee with id = %d has compensations related to him and therefore cannot be deleted", entityId));
+        }
     }
 
     private void _updateData(Employee savedEmployee, EmployeeRequestDto employeeRequestDto, JobTitle jobTitle, FundingSource fundingSource, Assignment assignment) {

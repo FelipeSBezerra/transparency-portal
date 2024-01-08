@@ -38,6 +38,10 @@ public class CompensationServiceImp extends BaseServiceImp<Compensation, UUID, C
         return savedCompensation;
     }
 
+    @Override
+    protected void _checkDataIntegrityViolationForDeletion(UUID entityId) {
+    }
+
     private void _updateData(Compensation savedCompensation, CompensationRequestDto compensationRequestDto,Employee employee) {
         savedCompensation.setEmployee(employee);
         savedCompensation.setCompensationReferenceYearMonth(compensationRequestDto.compensationReferenceYearMonth());

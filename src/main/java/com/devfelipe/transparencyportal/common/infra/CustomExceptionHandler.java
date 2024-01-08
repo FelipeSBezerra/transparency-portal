@@ -1,6 +1,7 @@
 package com.devfelipe.transparencyportal.common.infra;
 
 import com.devfelipe.transparencyportal.common.domain.exception.BadRequestException;
+import com.devfelipe.transparencyportal.common.domain.exception.DataIntegrityViolationException;
 import com.devfelipe.transparencyportal.common.domain.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,19 @@ public class CustomExceptionHandler {
                 .timestamp(Instant.now())
                 .status(status.value())
                 .error("Resource Not Found")
+                .message(exception.getMessage())
+                .path(httpServletRequest.getRequestURI())
+                .build();
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardErrorMessage> dataIntegrityViolationException(DataIntegrityViolationException exception, HttpServletRequest httpServletRequest) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        StandardErrorMessage errorMessage = StandardErrorMessage.builder()
+                .timestamp(Instant.now())
+                .status(status.value())
+                .error("Data Integrity Violation")
                 .message(exception.getMessage())
                 .path(httpServletRequest.getRequestURI())
                 .build();

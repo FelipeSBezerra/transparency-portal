@@ -62,11 +62,13 @@ public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType
             throw new ResourceNotFoundException(
                     String.format("There is no resource of type %s with the id %s in the database.", this.entityClass.getSimpleName(), entityId.toString()));
         }
+        _checkDataIntegrityViolationForDeletion(entityId);
         _getRepository().deleteById(entityId);
     }
 
     protected abstract EntityClass _createEntityFromDto(RequestDto requestDto);
     protected abstract EntityClass _updateEntityFromDto(EntityIdType entityId, RequestDto requestDto);
+    protected abstract void _checkDataIntegrityViolationForDeletion(EntityIdType entityId);
     private JpaRepository<EntityClass, EntityIdType> _getRepository() {
         return this.repository;
     }

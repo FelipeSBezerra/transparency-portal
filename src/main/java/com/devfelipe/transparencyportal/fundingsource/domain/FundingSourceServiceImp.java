@@ -1,6 +1,7 @@
 package com.devfelipe.transparencyportal.fundingsource.domain;
 
 import com.devfelipe.transparencyportal.common.domain.BaseServiceImp;
+import com.devfelipe.transparencyportal.common.domain.exception.DataIntegrityViolationException;
 import com.devfelipe.transparencyportal.fundingsource.domain.model.FundingSource;
 import com.devfelipe.transparencyportal.fundingsource.dto.FundingSourceMapper;
 import com.devfelipe.transparencyportal.fundingsource.dto.FundingSourceRequestDto;
@@ -30,6 +31,14 @@ public class FundingSourceServiceImp extends BaseServiceImp<FundingSource, Integ
         FundingSource savedFundingSource = this.findByIdReturnsEntity(entityId);
         _updateData(savedFundingSource, fundingSourceRequestDto);
         return savedFundingSource;
+    }
+
+    @Override
+    protected void _checkDataIntegrityViolationForDeletion(Integer entityId) {
+        if (!this.findByIdReturnsEntity(entityId).getEmployees().isEmpty()) {
+            throw new DataIntegrityViolationException(
+                    String.format("The funding source with id = %d has employees related to him and therefore cannot be deleted", entityId));
+        }
     }
 
     private void _updateData(FundingSource savedFundingSource, FundingSourceRequestDto fundingSourceRequestDto) {

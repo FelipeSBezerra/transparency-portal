@@ -6,6 +6,7 @@ import com.devfelipe.transparencyportal.assignment.dto.AssignmentRequestDto;
 import com.devfelipe.transparencyportal.assignment.dto.AssignmentResponseDto;
 import com.devfelipe.transparencyportal.assignment.infra.AssignmentRepository;
 import com.devfelipe.transparencyportal.common.domain.BaseServiceImp;
+import com.devfelipe.transparencyportal.common.domain.exception.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -30,6 +31,14 @@ public class AssignmentServiceImp extends BaseServiceImp<Assignment, Integer, As
         Assignment savedAssignment = this.findByIdReturnsEntity(entityId);
         _updateData(savedAssignment, assignmentRequestDto);
         return savedAssignment;
+    }
+
+    @Override
+    protected void _checkDataIntegrityViolationForDeletion(Integer entityId) {
+        if (!this.findByIdReturnsEntity(entityId).getEmployees().isEmpty()) {
+            throw new DataIntegrityViolationException(
+                    String.format("The assignment with id = %d has employees related to him and therefore cannot be deleted", entityId));
+        }
     }
 
     private void _updateData(Assignment savedAssignment, AssignmentRequestDto assignmentRequestDto) {
