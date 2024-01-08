@@ -27,4 +27,11 @@ public class JobTitleMapper implements BaseMapper<JobTitle, JobTitleResponseDto,
                 .build();
     }
 
+    public JobTitleMinimalResponseDto mapToMinimalResponseDto(JobTitle jobTitle) {
+        return new JobTitleMinimalResponseDto(
+                jobTitle.getJobTitleId(),
+                jobTitle.getName()
+        );
+    }
+
 }

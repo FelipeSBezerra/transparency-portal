@@ -25,4 +25,12 @@ public class AssignmentMapper implements BaseMapper<Assignment, AssignmentRespon
                 .createdAt(Instant.now())
                 .build();
     }
+
+    public AssignmentMinimalResponseDto mapToMinimalResponseDto(Assignment assignment) {
+        return new AssignmentMinimalResponseDto(
+                assignment.getAssignmentId(),
+                assignment.getName()
+        );
+    }
+
 }

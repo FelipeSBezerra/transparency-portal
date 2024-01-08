@@ -3,6 +3,7 @@ package com.devfelipe.transparencyportal.compensation.dto;
 import com.devfelipe.transparencyportal.common.dto.BaseMapper;
 import com.devfelipe.transparencyportal.compensation.domain.model.Compensation;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
+import com.devfelipe.transparencyportal.employee.dto.EmployeeMapper;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeMinimalResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +12,17 @@ import java.time.Instant;
 @Component
 public class CompensationMapper implements BaseMapper<Compensation, CompensationResponseDto, CompensationRequestDto> {
 
+    private final EmployeeMapper employeeMapper;
+
+    public CompensationMapper(EmployeeMapper employeeMapper) {
+        this.employeeMapper = employeeMapper;
+    }
+
     @Override
     public CompensationResponseDto mapToResponseDto(Compensation compensation) {
         return new CompensationResponseDto(
                 compensation.getCompensationId(),
-                new EmployeeMinimalResponseDto(compensation.getEmployee().getEmployeeId(), compensation.getEmployee().getName()),
+                employeeMapper.mapToMinimalResponseDto(compensation.getEmployee()),
                 compensation.getCompensationReferenceYearMonth(),
                 compensation.getBaseSalary(),
                 compensation.getPermanentAllowances(),

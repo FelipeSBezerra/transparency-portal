@@ -25,4 +25,11 @@ public class FundingSourceMapper implements BaseMapper<FundingSource, FundingSou
                 .createdAt(Instant.now())
                 .build();
     }
+
+    public FundingSourceMinimalResponseDto mapToMinimalResponseDto(FundingSource fundingSource) {
+        return new FundingSourceMinimalResponseDto(
+                fundingSource.getFundingSourceId(),
+                fundingSource.getName()
+        );
+    }
 }
