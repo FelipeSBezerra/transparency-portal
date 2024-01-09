@@ -6,10 +6,13 @@ import com.devfelipe.transparencyportal.common.domain.exception.ResourceNotFound
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
+import java.util.List;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
@@ -50,6 +53,25 @@ public class CustomExceptionHandler {
                 .message(exception.getMessage())
                 .path(httpServletRequest.getRequestURI())
                 .build();
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest httpServletRequest) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ValidationErrorMessage errorMessage = ValidationErrorMessage.ValidationErrorMessageBuilder()
+                .timestamp(Instant.now())
+                .status(status.value())
+                .error("Method Argument Not Valid")
+                .message("Error validating fields")
+                .path(httpServletRequest.getRequestURI())
+                .build();
+
+        exception.getBindingResult().getAllErrors().forEach((error) -> {
+            if (error instanceof FieldError fieldError) {
+                errorMessage.addError(new FieldMessage(fieldError.getField(), error.getDefaultMessage()));
+            }
+        });
         return ResponseEntity.status(status).body(errorMessage);
     }
 }
