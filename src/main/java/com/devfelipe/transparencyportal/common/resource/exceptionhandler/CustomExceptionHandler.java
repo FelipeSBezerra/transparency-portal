@@ -1,8 +1,11 @@
-package com.devfelipe.transparencyportal.common.infra;
+package com.devfelipe.transparencyportal.common.resource.exceptionhandler;
 
 import com.devfelipe.transparencyportal.common.domain.exception.BadRequestException;
 import com.devfelipe.transparencyportal.common.domain.exception.DataIntegrityViolationException;
 import com.devfelipe.transparencyportal.common.domain.exception.ResourceNotFoundException;
+import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.field.FieldMessage;
+import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.StandardErrorMessage;
+import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.ValidationErrorMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
-import java.util.List;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {

@@ -1,5 +1,6 @@
-package com.devfelipe.transparencyportal.common.infra;
+package com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage;
 
+import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.field.FieldMessage;
 import lombok.*;
 
 import java.time.Instant;

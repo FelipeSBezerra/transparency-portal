@@ -1,4 +1,4 @@
-package com.devfelipe.transparencyportal.common.infra;
+package com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
