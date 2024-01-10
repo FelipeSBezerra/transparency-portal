@@ -3,13 +3,15 @@ package com.devfelipe.transparencyportal.common.resource.exceptionhandler;
 import com.devfelipe.transparencyportal.common.domain.exception.BadRequestException;
 import com.devfelipe.transparencyportal.common.domain.exception.DataIntegrityViolationException;
 import com.devfelipe.transparencyportal.common.domain.exception.ResourceNotFoundException;
-import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.field.FieldMessage;
 import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.StandardErrorMessage;
 import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.ValidationErrorMessage;
+import com.devfelipe.transparencyportal.common.resource.exceptionhandler.errormessage.field.FieldMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -74,6 +76,32 @@ public class CustomExceptionHandler {
                 errorMessage.addError(new FieldMessage(fieldError.getField(), error.getDefaultMessage()));
             }
         });
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<StandardErrorMessage> httpMessageNotReadableException(HttpMessageNotReadableException exception, HttpServletRequest httpServletRequest) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardErrorMessage errorMessage = StandardErrorMessage.builder()
+                .timestamp(Instant.now())
+                .status(status.value())
+                .error("Http Message Not Readable")
+                .message("Invalid data sent. Verify the submitted data for type incompatibility")
+                .path(httpServletRequest.getRequestURI())
+                .build();
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<StandardErrorMessage> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception, HttpServletRequest httpServletRequest) {
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        StandardErrorMessage errorMessage = StandardErrorMessage.builder()
+                .timestamp(Instant.now())
+                .status(status.value())
+                .error("Http Request Method Not Supported")
+                .message(exception.getMessage())
+                .path(httpServletRequest.getRequestURI())
+                .build();
         return ResponseEntity.status(status).body(errorMessage);
     }
 }
