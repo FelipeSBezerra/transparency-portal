@@ -31,42 +31,42 @@ public class Compensation extends BaseModel implements Serializable {
     @EqualsAndHashCode.Include
     private UUID compensationId;
 
-    @NotNull(message = "The \"employee\" field cannot be empty")
+    @NotNull(message = "The employee field cannot be empty")
     @ManyToOne
     @JoinColumn(name = "employeeId")
     private Employee employee;
 
-    @NotNull(message = "The \"compensationReferenceYearMonth\" field cannot be empty")
+    @NotNull(message = "The compensationReferenceYearMonth field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
     @Convert(converter = YearMonthConverter.class)
     @Column(columnDefinition = "VARCHAR(7)")
     private YearMonth compensationReferenceYearMonth;
 
-    @NotNull(message = "The \"baseSalary\" field cannot be empty")
+    @NotNull(message = "The baseSalary field cannot be empty")
     @Column(precision = 10, scale = 2)
     private BigDecimal baseSalary;
 
-    @NotNull(message = "The \"permanentAllowances\" field cannot be empty")
+    @NotNull(message = "The permanentAllowances field cannot be empty")
     @Column(precision = 10, scale = 2)
     private BigDecimal permanentAllowances;
 
-    @NotNull(message = "The \"temporaryAllowances\" field cannot be empty")
+    @NotNull(message = "The temporaryAllowances field cannot be empty")
     @Column(precision = 10, scale = 2)
     private BigDecimal temporaryAllowances;
 
-    @NotNull(message = "The \"vacationPay\" field cannot be empty")
+    @NotNull(message = "The vacationPay field cannot be empty")
     @Column(precision = 10, scale = 2)
     private BigDecimal vacationPay;
 
-    @NotNull(message = "The \"indemnityBenefits\" field cannot be empty")
+    @NotNull(message = "The indemnityBenefits field cannot be empty")
     @Column(precision = 10, scale = 2)
     private BigDecimal indemnityBenefits;
 
-    @NotNull(message = "The \"legalDeductions\" field cannot be empty")
+    @NotNull(message = "The legalDeductions field cannot be empty")
     @Column(precision = 10, scale = 2)
     private BigDecimal legalDeductions;
 
-    @NotNull(message = "The \"miscellaneousDeduction\" field cannot be empty")
+    @NotNull(message = "The miscellaneousDeduction field cannot be empty")
     @Column(precision = 10, scale = 2)
     private BigDecimal miscellaneousDeduction;
 
@@ -79,7 +79,7 @@ public class Compensation extends BaseModel implements Serializable {
     @Column(precision = 10, scale = 2)
     private BigDecimal totalNetCompensation;
 
-    @NotNull(message = "The \"createdAt\" field cannot be empty")
+    @NotNull(message = "The createdAt field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant createdAt;
 

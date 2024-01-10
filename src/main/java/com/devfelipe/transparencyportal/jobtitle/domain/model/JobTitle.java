@@ -31,7 +31,7 @@ public class JobTitle extends BaseModel implements Serializable {
     @EqualsAndHashCode.Include
     private Integer jobTitleId;
 
-    @NotBlank(message = "The \"name\" field cannot be empty")
+    @NotBlank(message = "The name field cannot be empty")
     private String name;
 
     @JsonIgnore
@@ -39,7 +39,7 @@ public class JobTitle extends BaseModel implements Serializable {
     private Set<Employee> employees = new HashSet<>();
 
 
-    @NotNull(message = "The \"createdAt\" field cannot be empty")
+    @NotNull(message = "The createdAt field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant createdAt;
 

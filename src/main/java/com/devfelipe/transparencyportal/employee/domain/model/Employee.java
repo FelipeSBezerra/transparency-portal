@@ -35,34 +35,34 @@ public class Employee extends BaseModel implements Serializable {
     @EqualsAndHashCode.Include
     private Integer employeeId;
 
-    @NotBlank(message = "The \"name\" field cannot be empty")
+    @NotBlank(message = "The name field cannot be empty")
     private String name;
 
-    @NotNull(message = "The \"employmentType\" field cannot be empty")
+    @NotNull(message = "The employmentType field cannot be empty")
     @Enumerated(EnumType.STRING)
     private EmploymentType employmentType;
 
-    @NotNull(message = "The \"employmentStartDate\" field cannot be empty")
+    @NotNull(message = "The employmentStartDate field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate employmentStartDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate employmentEndDate;
 
-    @NotNull(message = "The \"weeklyWorkHours\" field cannot be empty")
+    @NotNull(message = "The weeklyWorkHours field cannot be empty")
     private Integer weeklyWorkHours;
 
-    @NotNull(message = "The \"jobTitle\" field cannot be empty")
+    @NotNull(message = "The jobTitle field cannot be empty")
     @ManyToOne
     @JoinColumn(name = "jobTitleId")
     private JobTitle jobTitle;
 
-    @NotNull(message = "The \"fundingSource\" field cannot be empty")
+    @NotNull(message = "The fundingSource field cannot be empty")
     @ManyToOne
     @JoinColumn(name = "fundingSourceId")
     private FundingSource fundingSource;
 
-    @NotNull(message = "The \"assignment\" field cannot be empty")
+    @NotNull(message = "The assignment field cannot be empty")
     @ManyToOne
     @JoinColumn(name = "assignmentId")
     private Assignment assignment;
@@ -70,7 +70,7 @@ public class Employee extends BaseModel implements Serializable {
     @OneToMany(mappedBy = "employee")
     private Set<Compensation> compensations = new HashSet<>();
 
-    @NotNull(message = "The \"createdAt\" field cannot be empty")
+    @NotNull(message = "The createdAt field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant createdAt;
 

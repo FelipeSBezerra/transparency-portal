@@ -34,14 +34,14 @@ public class Assignment extends BaseModel implements Serializable {
     @EqualsAndHashCode.Include
     private Integer assignmentId;
 
-    @NotBlank(message = "The \"name\" field cannot be empty")
+    @NotBlank(message = "The name field cannot be empty")
     private String name;
 
     @JsonIgnore
     @OneToMany(mappedBy = "assignment")
     private Set<Employee> employees = new HashSet<>();
 
-    @NotNull(message = "The \"createdAt\" field cannot be empty")
+    @NotNull(message = "The createdAt field cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant createdAt;
 
