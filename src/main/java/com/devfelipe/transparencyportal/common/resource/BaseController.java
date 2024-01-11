@@ -2,6 +2,7 @@ package com.devfelipe.transparencyportal.common.resource;
 
 import com.devfelipe.transparencyportal.common.domain.BaseService;
 import com.devfelipe.transparencyportal.common.dto.BaseResponseDto;
+import com.devfelipe.transparencyportal.common.infra.specification.BaseSpecification;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,18 +12,18 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-public abstract class BaseController<EntityClass, EntityIdType, RequestDto, ResponseDto extends BaseResponseDto> {
+public abstract class BaseController<EntityClass, EntityIdType, RequestDto, ResponseDto extends BaseResponseDto, Specification extends BaseSpecification<EntityClass>> {
 
-    private final BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto> baseService;
+    private final BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification> baseService;
 
-    protected BaseController(BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto> baseService) {
+    protected BaseController(BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification> baseService) {
         this.baseService = baseService;
     }
 
     @GetMapping
-    public ResponseEntity<Page<ResponseDto>> findAll(Pageable pageable) {
+    public ResponseEntity<Page<ResponseDto>> findAll(Specification specification, Pageable pageable) {
         _ckeckBaseServiceNotNull();
-        return ResponseEntity.ok(baseService.findAll(pageable));
+        return ResponseEntity.ok(baseService.findAll(specification, pageable));
     }
 
     @GetMapping("/{entityId}")

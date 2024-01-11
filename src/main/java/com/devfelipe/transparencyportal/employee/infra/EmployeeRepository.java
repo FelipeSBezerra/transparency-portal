@@ -1,11 +1,9 @@
 package com.devfelipe.transparencyportal.employee.infra;
 
+import com.devfelipe.transparencyportal.common.infra.BaseRepository;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface EmployeeRepository extends BaseRepository<Employee, Integer> {
 }

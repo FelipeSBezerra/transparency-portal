@@ -9,6 +9,7 @@ import com.devfelipe.transparencyportal.employee.dto.EmployeeMapper;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeRequestDto;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeResponseDto;
 import com.devfelipe.transparencyportal.employee.infra.EmployeeRepository;
+import com.devfelipe.transparencyportal.employee.infra.specification.EmployeeSpecification;
 import com.devfelipe.transparencyportal.fundingsource.domain.FundingSourceService;
 import com.devfelipe.transparencyportal.fundingsource.domain.model.FundingSource;
 import com.devfelipe.transparencyportal.jobtitle.domain.JobTitleService;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
-public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, EmployeeRequestDto, EmployeeResponseDto> implements EmployeeService{
+public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, EmployeeRequestDto, EmployeeResponseDto, EmployeeSpecification> implements EmployeeService{
 
     private final JobTitleService jobTitleService;
     private final FundingSourceService fundingSourceService;
@@ -37,7 +38,7 @@ public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, Employ
     protected Employee _createEntityFromDto(EmployeeRequestDto employeeRequestDto) {
         JobTitle jobTitle = jobTitleService.findByIdReturnsEntity(employeeRequestDto.jobTitleId());
         FundingSource fundingSource = fundingSourceService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
-        Assignment assignment = assignmentService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
+        Assignment assignment = assignmentService.findByIdReturnsEntity(employeeRequestDto.assignmentId());
         return employeeMapper.mapToEmployee(employeeRequestDto, jobTitle, fundingSource, assignment);
     }
 
@@ -46,7 +47,7 @@ public class EmployeeServiceImp extends BaseServiceImp<Employee, Integer, Employ
         Employee savedEmployee = this.findByIdReturnsEntity(entityId);
         JobTitle jobTitle = jobTitleService.findByIdReturnsEntity(employeeRequestDto.jobTitleId());
         FundingSource fundingSource = fundingSourceService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
-        Assignment assignment = assignmentService.findByIdReturnsEntity(employeeRequestDto.fundingSourceId());
+        Assignment assignment = assignmentService.findByIdReturnsEntity(employeeRequestDto.assignmentId());
         _updateData(savedEmployee, employeeRequestDto, jobTitle, fundingSource, assignment);
         return savedEmployee;
     }

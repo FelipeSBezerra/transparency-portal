@@ -7,12 +7,13 @@ import com.devfelipe.transparencyportal.fundingsource.dto.FundingSourceMapper;
 import com.devfelipe.transparencyportal.fundingsource.dto.FundingSourceRequestDto;
 import com.devfelipe.transparencyportal.fundingsource.dto.FundingSourceResponseDto;
 import com.devfelipe.transparencyportal.fundingsource.infra.FundingSourceRepository;
+import com.devfelipe.transparencyportal.fundingsource.infra.specification.FundingSourceSpecification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 @Service
-public class FundingSourceServiceImp extends BaseServiceImp<FundingSource, Integer, FundingSourceRequestDto, FundingSourceResponseDto> implements FundingSourceService{
+public class FundingSourceServiceImp extends BaseServiceImp<FundingSource, Integer, FundingSourceRequestDto, FundingSourceResponseDto, FundingSourceSpecification> implements FundingSourceService{
 
     private final FundingSourceMapper fundingSourceMapper;
 

@@ -1,11 +1,12 @@
 package com.devfelipe.transparencyportal.compensation.domain;
 
 import com.devfelipe.transparencyportal.common.domain.BaseServiceImp;
+import com.devfelipe.transparencyportal.compensation.domain.model.Compensation;
 import com.devfelipe.transparencyportal.compensation.dto.CompensationMapper;
 import com.devfelipe.transparencyportal.compensation.dto.CompensationRequestDto;
 import com.devfelipe.transparencyportal.compensation.dto.CompensationResponseDto;
-import com.devfelipe.transparencyportal.compensation.domain.model.Compensation;
 import com.devfelipe.transparencyportal.compensation.infra.CompensationRepository;
+import com.devfelipe.transparencyportal.compensation.infra.specification.CompensationSpecification;
 import com.devfelipe.transparencyportal.employee.domain.EmployeeService;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class CompensationServiceImp extends BaseServiceImp<Compensation, UUID, CompensationRequestDto, CompensationResponseDto> implements CompensationService {
+public class CompensationServiceImp extends BaseServiceImp<Compensation, UUID, CompensationRequestDto, CompensationResponseDto, CompensationSpecification> implements CompensationService {
 
     private final CompensationMapper compensationMapper;
     private final EmployeeService employeeService;

@@ -5,6 +5,7 @@ import com.devfelipe.transparencyportal.assignment.dto.AssignmentMapper;
 import com.devfelipe.transparencyportal.assignment.dto.AssignmentRequestDto;
 import com.devfelipe.transparencyportal.assignment.dto.AssignmentResponseDto;
 import com.devfelipe.transparencyportal.assignment.infra.AssignmentRepository;
+import com.devfelipe.transparencyportal.assignment.infra.specification.AssignmentSpecification;
 import com.devfelipe.transparencyportal.common.domain.BaseServiceImp;
 import com.devfelipe.transparencyportal.common.domain.exception.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
-public class AssignmentServiceImp extends BaseServiceImp<Assignment, Integer, AssignmentRequestDto, AssignmentResponseDto> implements AssignmentService {
+public class AssignmentServiceImp extends BaseServiceImp<Assignment, Integer, AssignmentRequestDto, AssignmentResponseDto, AssignmentSpecification> implements AssignmentService {
 
     private final AssignmentMapper assignmentMapper;
 

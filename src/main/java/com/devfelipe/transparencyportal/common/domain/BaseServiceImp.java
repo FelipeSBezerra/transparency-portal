@@ -3,29 +3,30 @@ package com.devfelipe.transparencyportal.common.domain;
 import com.devfelipe.transparencyportal.common.domain.exception.ResourceNotFoundException;
 import com.devfelipe.transparencyportal.common.domain.model.BaseModel;
 import com.devfelipe.transparencyportal.common.dto.BaseMapper;
+import com.devfelipe.transparencyportal.common.infra.BaseRepository;
+import com.devfelipe.transparencyportal.common.infra.specification.BaseSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType,RequestDto, ResponseDto> implements BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto>{
+public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType,RequestDto, ResponseDto, Specification extends BaseSpecification<EntityClass>> implements BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification>{
 
     private final Class<EntityClass> entityClass;
-    private final JpaRepository<EntityClass, EntityIdType> repository;
+    private final BaseRepository<EntityClass, EntityIdType> repository;
     private final BaseMapper<EntityClass, ResponseDto, RequestDto> baseMapper;
 
-    protected BaseServiceImp(Class<EntityClass> entityClass, JpaRepository<EntityClass, EntityIdType> repository, BaseMapper<EntityClass, ResponseDto, RequestDto> baseMapper) {
+    protected BaseServiceImp(Class<EntityClass> entityClass, BaseRepository<EntityClass, EntityIdType> repository, BaseMapper<EntityClass, ResponseDto, RequestDto> baseMapper) {
         this.entityClass = entityClass;
         this.repository = repository;
         this.baseMapper = baseMapper;
     }
 
     @Override
-    public Page<ResponseDto> findAll(Pageable pageable) {
-        Page<EntityClass> entityClassPage = _getRepository().findAll(pageable);
+    public Page<ResponseDto> findAll(Specification Specification, Pageable pageable) {
+        Page<EntityClass> entityClassPage = _getRepository().findAll(Specification ,pageable);
         List<ResponseDto> responseDtoList = entityClassPage.getContent().stream()
                 .map(baseMapper::mapToResponseDto)
                 .collect(Collectors.toList());
@@ -69,7 +70,7 @@ public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType
     protected abstract EntityClass _createEntityFromDto(RequestDto requestDto);
     protected abstract EntityClass _updateEntityFromDto(EntityIdType entityId, RequestDto requestDto);
     protected abstract void _checkDataIntegrityViolationForDeletion(EntityIdType entityId);
-    private JpaRepository<EntityClass, EntityIdType> _getRepository() {
+    private BaseRepository<EntityClass, EntityIdType> _getRepository() {
         return this.repository;
     }
 

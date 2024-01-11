@@ -7,12 +7,13 @@ import com.devfelipe.transparencyportal.jobtitle.dto.JobTitleMapper;
 import com.devfelipe.transparencyportal.jobtitle.dto.JobTitleRequestDto;
 import com.devfelipe.transparencyportal.jobtitle.dto.JobTitleResponseDto;
 import com.devfelipe.transparencyportal.jobtitle.infra.JobTitleRepository;
+import com.devfelipe.transparencyportal.jobtitle.infra.specification.JobTitleSpecification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 @Service
-public class JobTitleServiceImp extends BaseServiceImp<JobTitle, Integer, JobTitleRequestDto, JobTitleResponseDto> implements JobTitleService{
+public class JobTitleServiceImp extends BaseServiceImp<JobTitle, Integer, JobTitleRequestDto, JobTitleResponseDto, JobTitleSpecification> implements JobTitleService{
 
     private final JobTitleMapper jobTitleMapper;
 
