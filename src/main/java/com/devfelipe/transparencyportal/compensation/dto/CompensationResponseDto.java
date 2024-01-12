@@ -3,40 +3,41 @@ package com.devfelipe.transparencyportal.compensation.dto;
 import com.devfelipe.transparencyportal.common.dto.BaseResponseDto;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeMinimalResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.YearMonth;
 import java.util.UUID;
 
-public record CompensationResponseDto(
-        UUID id,
-        EmployeeMinimalResponseDto employee,
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Builder
+public class CompensationResponseDto extends BaseResponseDto<UUID> {
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
-        YearMonth compensationReferenceYearMonth,
+    private UUID id;
+    private EmployeeMinimalResponseDto employee;
 
-        BigDecimal baseSalary,
-        BigDecimal permanentAllowances,
-        BigDecimal temporaryAllowances,
-        BigDecimal vacationPay,
-        BigDecimal indemnityBenefits,
-        BigDecimal legalDeductions,
-        BigDecimal miscellaneousDeduction,
-        BigDecimal totalDeductions,
-        BigDecimal totalGrossCompensation,
-        BigDecimal totalNetCompensation,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
+    private YearMonth compensationReferenceYearMonth;
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        Instant createdAt,
+    private BigDecimal baseSalary;
+    private BigDecimal permanentAllowances;
+    private BigDecimal temporaryAllowances;
+    private BigDecimal vacationPay;
+    private BigDecimal indemnityBenefits;
+    private BigDecimal legalDeductions;
+    private BigDecimal miscellaneousDeduction;
+    private BigDecimal totalDeductions;
+    private BigDecimal totalGrossCompensation;
+    private BigDecimal totalNetCompensation;
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        Instant updatedAt
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+    private Instant createdAt;
 
-) implements BaseResponseDto<UUID> {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+    private Instant updatedA;
 
-    @Override
-    public UUID getId() {
-        return this.id;
-    }
 }

@@ -2,22 +2,23 @@ package com.devfelipe.transparencyportal.jobtitle.dto;
 
 import com.devfelipe.transparencyportal.common.dto.BaseResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 
-public record JobTitleResponseDto (
-        Integer id,
-        String name,
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Builder
+public class JobTitleResponseDto extends BaseResponseDto<Integer> {
+
+        private Integer id;
+        private String name;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        Instant createdAt,
+        private Instant createdAt;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        Instant updatedAt
-) implements BaseResponseDto<Integer> {
-
-        @Override
-        public Integer getId() {
-                return this.id;
-        }
+        private Instant updatedAt;
 }

@@ -1,7 +1,12 @@
 package com.devfelipe.transparencyportal.fundingsource.dto;
 
-public record FundingSourceMinimalResponseDto(
-        Integer fundingSourceId,
-        String fundingSourceName
-) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class FundingSourceMinimalResponseDto {
+
+    private Integer fundingSourceId;
+    private String fundingSourceName;
 }

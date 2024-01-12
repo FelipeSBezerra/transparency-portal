@@ -1,7 +1,12 @@
 package com.devfelipe.transparencyportal.employee.dto;
 
-public record EmployeeMinimalResponseDto(
-        Integer employeeId,
-        String employeeName
-) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class EmployeeMinimalResponseDto {
+
+    private Integer employeeId;
+    private String employeeName;
 }

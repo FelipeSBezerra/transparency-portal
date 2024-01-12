@@ -1,6 +1,6 @@
 package com.devfelipe.transparencyportal.common.dto;
 
-public interface BaseResponseDto<EntityIdTipe> {
+public abstract class BaseResponseDto<EntityIdTipe> {
 
-    EntityIdTipe getId();
+    public abstract EntityIdTipe getId();
 }

@@ -2,21 +2,23 @@ package com.devfelipe.transparencyportal.fundingsource.dto;
 
 import com.devfelipe.transparencyportal.common.dto.BaseResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 
-public record FundingSourceResponseDto(
-        Integer id,
-        String name,
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Builder
+public class FundingSourceResponseDto extends BaseResponseDto<Integer> {
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        Instant createdAt,
+    private Integer id;
+    private String name;
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        Instant updatedAt
-) implements BaseResponseDto {
-    @Override
-    public Object getId() {
-        return this.id;
-    }
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+    private Instant createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+    private Instant updatedAt;
 }

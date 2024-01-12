@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-public abstract class BaseController<EntityClass, EntityIdType, RequestDto, ResponseDto extends BaseResponseDto, Specification extends BaseSpecification<EntityClass>> {
+public abstract class BaseController<EntityClass, EntityIdType, RequestDto, ResponseDto extends BaseResponseDto<EntityIdType>, Specification extends BaseSpecification<EntityClass>> {
 
     private final BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification> baseService;
 
@@ -22,19 +22,19 @@ public abstract class BaseController<EntityClass, EntityIdType, RequestDto, Resp
 
     @GetMapping
     public ResponseEntity<Page<ResponseDto>> findAll(Specification specification, Pageable pageable) {
-        _ckeckBaseServiceNotNull();
+        _checkBaseServiceNotNull();
         return ResponseEntity.ok(baseService.findAll(specification, pageable));
     }
 
     @GetMapping("/{entityId}")
     public ResponseEntity<ResponseDto> findById(@PathVariable EntityIdType entityId) {
-        _ckeckBaseServiceNotNull();
+        _checkBaseServiceNotNull();
         return ResponseEntity.ok(baseService.findById(entityId));
     }
 
     @PostMapping
     public ResponseEntity<ResponseDto> create(@RequestBody @Valid RequestDto requestDto) {
-        _ckeckBaseServiceNotNull();
+        _checkBaseServiceNotNull();
         ResponseDto savedEntity = baseService.create(requestDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{entityId}").buildAndExpand(savedEntity.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -42,18 +42,18 @@ public abstract class BaseController<EntityClass, EntityIdType, RequestDto, Resp
 
     @PutMapping("/{entityId}")
     public ResponseEntity<ResponseDto> update(@PathVariable EntityIdType entityId, @RequestBody @Valid RequestDto requestDto) {
-        _ckeckBaseServiceNotNull();
+        _checkBaseServiceNotNull();
         return ResponseEntity.ok(baseService.update(entityId, requestDto));
     }
 
     @DeleteMapping("/{entityId}")
     public ResponseEntity<Void> deleteById(@PathVariable EntityIdType entityId) {
-        _ckeckBaseServiceNotNull();
+        _checkBaseServiceNotNull();
         baseService.deleteById(entityId);
         return ResponseEntity.ok().build();
     }
 
-    private void _ckeckBaseServiceNotNull() {
+    private void _checkBaseServiceNotNull() {
         if (baseService == null) {
             throw new IllegalStateException("The baseService was not defined in the constructor");
         }
