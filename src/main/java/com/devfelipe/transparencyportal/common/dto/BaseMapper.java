@@ -1,6 +1,12 @@
 package com.devfelipe.transparencyportal.common.dto;
 
-public interface BaseMapper<EntityClass, ResponseDto, RequestDto> {
+/**
+ * Base mapper interface defining the contract for mapping entities to response DTOs.
+ *
+ * @param <T>   The type of the entity.
+ * @param <Resp> The type of the response DTO.
+ */
+public interface BaseMapper<T, Resp> {
 
-    ResponseDto mapToResponseDto(EntityClass entityClass);
+    Resp mapToResponseDto(T entityClass);
 }

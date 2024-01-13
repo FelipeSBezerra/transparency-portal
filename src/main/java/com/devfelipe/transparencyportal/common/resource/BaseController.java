@@ -20,53 +20,63 @@ import java.net.URI;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public abstract class BaseController<EntityClass, EntityIdType, RequestDto, ResponseDto extends BaseResponseDto<EntityIdType>, Specification extends BaseSpecification<EntityClass>> {
+/**
+ * This abstract class serves as a base for generic controllers.
+ *
+ * @param <T>       Type of the entity handled by the controller.
+ * @param <ID>      Type of the unique identifier for the entity.
+ * @param <R>       Type of the request DTO.
+ * @param <Resp>    Type of the response DTO, extending {@link BaseResponseDto}.
+ * @param <S>       Type of the specification, extending {@link BaseSpecification}.
+ */
+public abstract class BaseController<T, ID, R, Resp extends BaseResponseDto<ID>, S extends BaseSpecification<T>> {
 
-    private final BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification> baseService;
-    private final HateoasService<EntityIdType, ResponseDto, Specification> hateaosService;
+    private final BaseService<T, ID, R, Resp, S> baseService;
+    private final HateoasService<ID, Resp, S> hateaosService;
 
-    protected BaseController(BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification> baseService) {
+    protected BaseController(BaseService<T, ID, R, Resp, S> baseService) {
         this.baseService = baseService;
         this.hateaosService = new HateaosServiceImp<>();
     }
 
+
     @GetMapping
-    public ResponseEntity<PagedModelWithActions<ResponseDto>> findAll(Specification specification, Pageable pageable) {
+    public ResponseEntity<PagedModelWithActions<Resp>> findAll(S specification, Pageable pageable) {
         _checkBaseServiceNotNull();
-        Page<ResponseDto> responseDtoPage = baseService.findAll(specification, pageable);
+        Page<Resp> responseDtoPage = baseService.findAll(specification, pageable);
         String createUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).create(null)).toUri().toString();
         return ResponseEntity.ok(this.hateaosService.addActionsInFindAll(responseDtoPage, createUri, specification, pageable));
     }
 
     @GetMapping("/{entityId}")
-    public ResponseEntity<ResponseDtoWithActions<EntityIdType>> findById(@PathVariable EntityIdType entityId) {
+    public ResponseEntity<ResponseDtoWithActions<ID>> findById(@PathVariable ID entityId) {
         _checkBaseServiceNotNull();
-        BaseResponseDto<EntityIdType> result = baseService.findById(entityId);
+        BaseResponseDto<ID> result = baseService.findById(entityId);
         return ResponseEntity.ok(this.hateaosService.addActionsInFindById(result, _createUriList(entityId)));
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto> create(@RequestBody @Valid RequestDto requestDto) {
+    public ResponseEntity<Resp> create(@RequestBody @Valid R requestDto) {
         _checkBaseServiceNotNull();
-        ResponseDto savedEntity = baseService.create(requestDto);
+        Resp savedEntity = baseService.create(requestDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{entityId}").buildAndExpand(savedEntity.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{entityId}")
-    public ResponseEntity<ResponseDto> update(@PathVariable EntityIdType entityId, @RequestBody @Valid RequestDto requestDto) {
+    public ResponseEntity<Resp> update(@PathVariable ID entityId, @RequestBody @Valid R requestDto) {
         _checkBaseServiceNotNull();
         return ResponseEntity.ok(baseService.update(entityId, requestDto));
     }
 
     @DeleteMapping("/{entityId}")
-    public ResponseEntity<Void> deleteById(@PathVariable EntityIdType entityId) {
+    public ResponseEntity<Void> deleteById(@PathVariable ID entityId) {
         _checkBaseServiceNotNull();
         baseService.deleteById(entityId);
         return ResponseEntity.ok().build();
     }
 
-    private UriList _createUriList(EntityIdType entityId) {
+    private UriList _createUriList(ID entityId) {
         String findAllUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).findAll(null, null)).toUri().toString();
         String createUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).create(null)).toUri().toString();
         String putUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).update(entityId, null)).toUri().toString();

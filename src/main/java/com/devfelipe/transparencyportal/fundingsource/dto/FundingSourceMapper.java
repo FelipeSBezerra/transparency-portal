@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 @Component
-public class FundingSourceMapper implements BaseMapper<FundingSource, FundingSourceResponseDto, FundingSourceRequestDto> {
+public class FundingSourceMapper implements BaseMapper<FundingSource, FundingSourceResponseDto> {
 
     @Override
     public FundingSourceResponseDto mapToResponseDto(FundingSource fundingSource) {

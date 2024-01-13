@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 @Component
-public class EmployeeMapper implements BaseMapper<Employee, EmployeeResponseDto, EmployeeRequestDto> {
+public class EmployeeMapper implements BaseMapper<Employee, EmployeeResponseDto> {
 
     private final JobTitleMapper jobTitleMapper;
     private final FundingSourceMapper fundingSourceMapper;

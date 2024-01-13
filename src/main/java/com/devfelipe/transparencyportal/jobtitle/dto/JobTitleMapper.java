@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 @Component
-public class JobTitleMapper implements BaseMapper<JobTitle, JobTitleResponseDto, JobTitleRequestDto> {
+public class JobTitleMapper implements BaseMapper<JobTitle, JobTitleResponseDto> {
 
 
     @Override

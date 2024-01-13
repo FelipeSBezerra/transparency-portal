@@ -10,7 +10,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class BaseSpecification<EntityClass> implements Specification<EntityClass> {
+/**
+ * Base specification class implementing the Spring Data JPA Specification interface,
+ * providing reusable methods for building predicates in query specifications.
+ *
+ * @param <T> The type of the entity.
+ */
+public abstract class BaseSpecification<T> implements Specification<T> {
 
     protected void _addEqualCondition(List<Predicate> predicates, CriteriaBuilder criteriaBuilder, Expression<?> expression, Object value) {
         if (Objects.nonNull(value)) {

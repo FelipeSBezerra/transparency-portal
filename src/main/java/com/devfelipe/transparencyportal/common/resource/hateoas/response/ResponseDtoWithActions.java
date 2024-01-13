@@ -14,8 +14,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Builder
-public class ResponseDtoWithActions<EntityIdType> extends CollectionModel<ResponseDtoWithActions<EntityIdType>> {
+public class ResponseDtoWithActions<ID> extends CollectionModel<ResponseDtoWithActions<ID>> {
 
-    private BaseResponseDto<EntityIdType> result;
+    private BaseResponseDto<ID> result;
     private List<Action> actions;
 }

@@ -12,53 +12,62 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType,RequestDto, ResponseDto, Specification extends BaseSpecification<EntityClass>> implements BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification>{
+/**
+ * Abstract implementation of the BaseService interface, providing common CRUD operations for entities.
+ *
+ * @param <T>   The type of the entity extending {@link BaseModel}.
+ * @param <ID>  The type of the entity's unique identifier.
+ * @param <R>   The type of the request DTO.
+ * @param <Resp> The type of the response DTO.
+ * @param <S>   The type of the specification extending {@link BaseSpecification}.
+ */
+public abstract class BaseServiceImp<T extends BaseModel, ID, R, Resp, S extends BaseSpecification<T>> implements BaseService<T, ID, R, Resp, S>{
 
-    private final Class<EntityClass> entityClass;
-    private final BaseRepository<EntityClass, EntityIdType> repository;
-    private final BaseMapper<EntityClass, ResponseDto, RequestDto> baseMapper;
+    private final Class<T> entityClass;
+    private final BaseRepository<T, ID> repository;
+    private final BaseMapper<T, Resp> baseMapper;
 
-    protected BaseServiceImp(Class<EntityClass> entityClass, BaseRepository<EntityClass, EntityIdType> repository, BaseMapper<EntityClass, ResponseDto, RequestDto> baseMapper) {
+    protected BaseServiceImp(Class<T> entityClass, BaseRepository<T, ID> repository, BaseMapper<T, Resp> baseMapper) {
         this.entityClass = entityClass;
         this.repository = repository;
         this.baseMapper = baseMapper;
     }
 
     @Override
-    public Page<ResponseDto> findAll(Specification Specification, Pageable pageable) {
-        Page<EntityClass> entityClassPage = _getRepository().findAll(Specification ,pageable);
-        List<ResponseDto> responseDtoList = entityClassPage.getContent().stream()
+    public Page<Resp> findAll(S specification, Pageable pageable) {
+        Page<T> entityClassPage = _getRepository().findAll(specification ,pageable);
+        List<Resp> responseDtoList = entityClassPage.getContent().stream()
                 .map(baseMapper::mapToResponseDto)
                 .collect(Collectors.toList());
         return new PageImpl<>(responseDtoList, entityClassPage.getPageable(), entityClassPage.getTotalElements());
     }
 
     @Override
-    public ResponseDto findById(EntityIdType entityId) {
+    public Resp findById(ID entityId) {
         return baseMapper.mapToResponseDto(findByIdReturnsEntity(entityId));
     }
 
     @Override
-    public EntityClass findByIdReturnsEntity(EntityIdType entityId) {
+    public T findByIdReturnsEntity(ID entityId) {
         return _getRepository().findById(entityId).orElseThrow(() -> new ResourceNotFoundException(
                 String.format("There is no resource of type %s with the id %s in the database.", this.entityClass.getSimpleName(), entityId.toString())));
     }
 
     @Override
-    public ResponseDto create(RequestDto requestDto) {
-        EntityClass newEntity = _createEntityFromDto(requestDto);
-        EntityClass savedEntity = _getRepository().save(newEntity);
+    public Resp create(R requestDto) {
+        T newEntity = _createEntityFromDto(requestDto);
+        T savedEntity = _getRepository().save(newEntity);
         return baseMapper.mapToResponseDto(savedEntity);
     }
 
     @Override
-    public ResponseDto update(EntityIdType entityId, RequestDto requestDto) {
-        EntityClass updatedEntity = _updateEntityFromDto(entityId, requestDto);
+    public Resp update(ID entityId, R requestDto) {
+        T updatedEntity = _updateEntityFromDto(entityId, requestDto);
         return baseMapper.mapToResponseDto(_getRepository().save(updatedEntity));
     }
 
     @Override
-    public void deleteById(EntityIdType entityId) {
+    public void deleteById(ID entityId) {
         if (!_getRepository().existsById(entityId)) {
             throw new ResourceNotFoundException(
                     String.format("There is no resource of type %s with the id %s in the database.", this.entityClass.getSimpleName(), entityId.toString()));
@@ -67,10 +76,10 @@ public abstract class BaseServiceImp<EntityClass extends BaseModel, EntityIdType
         _getRepository().deleteById(entityId);
     }
 
-    protected abstract EntityClass _createEntityFromDto(RequestDto requestDto);
-    protected abstract EntityClass _updateEntityFromDto(EntityIdType entityId, RequestDto requestDto);
-    protected abstract void _checkDataIntegrityViolationForDeletion(EntityIdType entityId);
-    private BaseRepository<EntityClass, EntityIdType> _getRepository() {
+    protected abstract T _createEntityFromDto(R requestDto);
+    protected abstract T _updateEntityFromDto(ID entityId, R requestDto);
+    protected abstract void _checkDataIntegrityViolationForDeletion(ID entityId);
+    private BaseRepository<T, ID> _getRepository() {
         return this.repository;
     }
 

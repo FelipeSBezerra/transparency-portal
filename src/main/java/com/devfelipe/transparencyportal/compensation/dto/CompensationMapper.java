@@ -4,13 +4,12 @@ import com.devfelipe.transparencyportal.common.dto.BaseMapper;
 import com.devfelipe.transparencyportal.compensation.domain.model.Compensation;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
 import com.devfelipe.transparencyportal.employee.dto.EmployeeMapper;
-import com.devfelipe.transparencyportal.employee.dto.EmployeeMinimalResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
 @Component
-public class CompensationMapper implements BaseMapper<Compensation, CompensationResponseDto, CompensationRequestDto> {
+public class CompensationMapper implements BaseMapper<Compensation, CompensationResponseDto> {
 
     private final EmployeeMapper employeeMapper;
 

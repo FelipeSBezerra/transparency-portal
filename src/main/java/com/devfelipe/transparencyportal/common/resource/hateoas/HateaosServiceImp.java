@@ -12,11 +12,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of the HATEOAS (Hypermedia as the Engine of Application State) service, providing methods to enhance
+ * responses with hypermedia links.
+ *
+ * @param <ID>   Type of the unique identifier used in the service.
+ * @param <Resp> Type of the response DTO.
+ * @param <S>    Type of the specification used in the service, if applicable.
+ */
 @Service
-public class HateaosServiceImp<EntityIdType, ResponseDto, Specification> implements HateoasService<EntityIdType, ResponseDto, Specification> {
+public class HateaosServiceImp<ID, Resp, S> implements HateoasService<ID, Resp, S> {
 
     @Override
-    public ResponseDtoWithActions<EntityIdType> addActionsInFindById(BaseResponseDto<EntityIdType> baseResponseDto, UriList uriList) {
+    public ResponseDtoWithActions<ID> addActionsInFindById(BaseResponseDto<ID> baseResponseDto, UriList uriList) {
         List<Action> actions = List.of(
                 new Action("all", uriList.findAllUri(), "GET"),
                 new Action("update", uriList.putUri(), "PUT"),
@@ -26,7 +34,7 @@ public class HateaosServiceImp<EntityIdType, ResponseDto, Specification> impleme
     }
 
     @Override
-    public PagedModelWithActions<ResponseDto> addActionsInFindAll(Page<ResponseDto> responseDtoPage, String createUri, Specification specification, Pageable pageable) {
+    public PagedModelWithActions<Resp> addActionsInFindAll(Page<Resp> responseDtoPage, String createUri, S specification, Pageable pageable) {
         List<Action> actions = List.of(
                 new Action("create", createUri, "POST")
         );

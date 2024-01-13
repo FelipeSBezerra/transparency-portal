@@ -5,6 +5,11 @@ import jakarta.persistence.Converter;
 
 import java.time.YearMonth;
 
+/**
+ * JPA AttributeConverter for converting YearMonth objects to and from database columns.
+ *
+ * @see YearMonth
+ */
 @Converter(autoApply = true)
 public class YearMonthConverter implements AttributeConverter<YearMonth, String> {
     @Override
