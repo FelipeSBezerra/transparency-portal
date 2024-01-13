@@ -3,33 +3,46 @@ package com.devfelipe.transparencyportal.common.resource;
 import com.devfelipe.transparencyportal.common.domain.BaseService;
 import com.devfelipe.transparencyportal.common.dto.BaseResponseDto;
 import com.devfelipe.transparencyportal.common.infra.specification.BaseSpecification;
+import com.devfelipe.transparencyportal.common.resource.hateoas.HateaosServiceImp;
+import com.devfelipe.transparencyportal.common.resource.hateoas.HateoasService;
+import com.devfelipe.transparencyportal.common.resource.hateoas.response.PagedModelWithActions;
+import com.devfelipe.transparencyportal.common.resource.hateoas.response.ResponseDtoWithActions;
+import com.devfelipe.transparencyportal.common.resource.hateoas.response.field.UriList;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 public abstract class BaseController<EntityClass, EntityIdType, RequestDto, ResponseDto extends BaseResponseDto<EntityIdType>, Specification extends BaseSpecification<EntityClass>> {
 
     private final BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification> baseService;
+    private final HateoasService<EntityIdType, ResponseDto, Specification> hateaosService;
 
     protected BaseController(BaseService<EntityClass, EntityIdType, RequestDto, ResponseDto, Specification> baseService) {
         this.baseService = baseService;
+        this.hateaosService = new HateaosServiceImp<>();
     }
 
     @GetMapping
-    public ResponseEntity<Page<ResponseDto>> findAll(Specification specification, Pageable pageable) {
+    public ResponseEntity<PagedModelWithActions<ResponseDto>> findAll(Specification specification, Pageable pageable) {
         _checkBaseServiceNotNull();
-        return ResponseEntity.ok(baseService.findAll(specification, pageable));
+        Page<ResponseDto> responseDtoPage = baseService.findAll(specification, pageable);
+        String createUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).create(null)).toUri().toString();
+        return ResponseEntity.ok(this.hateaosService.addActionsInFindAll(responseDtoPage, createUri, specification, pageable));
     }
 
     @GetMapping("/{entityId}")
-    public ResponseEntity<ResponseDto> findById(@PathVariable EntityIdType entityId) {
+    public ResponseEntity<ResponseDtoWithActions<EntityIdType>> findById(@PathVariable EntityIdType entityId) {
         _checkBaseServiceNotNull();
-        return ResponseEntity.ok(baseService.findById(entityId));
+        BaseResponseDto<EntityIdType> result = baseService.findById(entityId);
+        return ResponseEntity.ok(this.hateaosService.addActionsInFindById(result, _createUriList(entityId)));
     }
 
     @PostMapping
@@ -51,6 +64,14 @@ public abstract class BaseController<EntityClass, EntityIdType, RequestDto, Resp
         _checkBaseServiceNotNull();
         baseService.deleteById(entityId);
         return ResponseEntity.ok().build();
+    }
+
+    private UriList _createUriList(EntityIdType entityId) {
+        String findAllUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).findAll(null, null)).toUri().toString();
+        String createUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).create(null)).toUri().toString();
+        String putUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).update(entityId, null)).toUri().toString();
+        String deleteUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).deleteById(entityId)).toUri().toString();
+        return new UriList(findAllUri, createUri, putUri, deleteUri);
     }
 
     private void _checkBaseServiceNotNull() {
