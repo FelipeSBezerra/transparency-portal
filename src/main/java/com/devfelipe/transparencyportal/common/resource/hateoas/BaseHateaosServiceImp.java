@@ -5,6 +5,7 @@ import com.devfelipe.transparencyportal.common.resource.hateoas.response.PagedMo
 import com.devfelipe.transparencyportal.common.resource.hateoas.response.ResponseDtoWithActions;
 import com.devfelipe.transparencyportal.common.resource.hateoas.response.field.Action;
 import com.devfelipe.transparencyportal.common.resource.hateoas.response.field.UriList;
+import com.devfelipe.transparencyportal.common.resource.hateoas.specific.JoinLinkHateoasProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -21,10 +22,11 @@ import java.util.List;
  * @param <S>    Type of the specification used in the service, if applicable.
  */
 @Service
-public class HateaosServiceImp<ID, Resp, S> implements HateoasService<ID, Resp, S> {
+public abstract class BaseHateaosServiceImp<ID, Resp extends BaseResponseDto<ID>, S> implements BaseHateoasService<ID, Resp, S> {
 
     @Override
     public ResponseDtoWithActions<ID> addActionsInFindById(BaseResponseDto<ID> baseResponseDto, UriList uriList) {
+        _addJoinLinkIfSupported(baseResponseDto);
         List<Action> actions = List.of(
                 new Action("all", uriList.findAllUri(), "GET"),
                 new Action("update", uriList.putUri(), "PUT"),
@@ -39,12 +41,22 @@ public class HateaosServiceImp<ID, Resp, S> implements HateoasService<ID, Resp, 
                 new Action("create", createUri, "POST")
         );
 
+        List<BaseResponseDto<ID>> responseDto = (List<BaseResponseDto<ID>>) responseDtoPage.getContent();
+        responseDto.forEach(this::_addJoinLinkIfSupported);
+
         PagedModel.PageMetadata metadata = new PagedModel.PageMetadata(
                 responseDtoPage.getSize(),
                 responseDtoPage.getNumber(),
                 responseDtoPage.getTotalElements(),
                 responseDtoPage.getTotalPages());
 
-        return new PagedModelWithActions(responseDtoPage.getContent(), actions, metadata);
+        return new PagedModelWithActions<>((List<Resp>) responseDto, actions, metadata);
+    }
+
+
+    private void _addJoinLinkIfSupported(BaseResponseDto<ID> baseResponseDto) {
+        if (this instanceof JoinLinkHateoasProvider) {
+            ((JoinLinkHateoasProvider<ID, BaseResponseDto<ID>>) this).addJoinLink(baseResponseDto);
+        }
     }
 }

@@ -3,8 +3,7 @@ package com.devfelipe.transparencyportal.common.resource;
 import com.devfelipe.transparencyportal.common.domain.BaseService;
 import com.devfelipe.transparencyportal.common.dto.BaseResponseDto;
 import com.devfelipe.transparencyportal.common.infra.specification.BaseSpecification;
-import com.devfelipe.transparencyportal.common.resource.hateoas.HateaosServiceImp;
-import com.devfelipe.transparencyportal.common.resource.hateoas.HateoasService;
+import com.devfelipe.transparencyportal.common.resource.hateoas.BaseHateoasService;
 import com.devfelipe.transparencyportal.common.resource.hateoas.response.PagedModelWithActions;
 import com.devfelipe.transparencyportal.common.resource.hateoas.response.ResponseDtoWithActions;
 import com.devfelipe.transparencyportal.common.resource.hateoas.response.field.UriList;
@@ -32,11 +31,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public abstract class BaseController<T, ID, R, Resp extends BaseResponseDto<ID>, S extends BaseSpecification<T>> {
 
     private final BaseService<T, ID, R, Resp, S> baseService;
-    private final HateoasService<ID, Resp, S> hateaosService;
+    private final BaseHateoasService<ID, Resp, S> baseHateoasService;
 
-    protected BaseController(BaseService<T, ID, R, Resp, S> baseService) {
+    protected BaseController(BaseService<T, ID, R, Resp, S> baseService, BaseHateoasService<ID, Resp, S> baseHateoasService) {
         this.baseService = baseService;
-        this.hateaosService = new HateaosServiceImp<>();
+        this.baseHateoasService = baseHateoasService;
     }
 
 
@@ -45,14 +44,14 @@ public abstract class BaseController<T, ID, R, Resp extends BaseResponseDto<ID>,
         _checkBaseServiceNotNull();
         Page<Resp> responseDtoPage = baseService.findAll(specification, pageable);
         String createUri = WebMvcLinkBuilder.linkTo(methodOn(getClass()).create(null)).toUri().toString();
-        return ResponseEntity.ok(this.hateaosService.addActionsInFindAll(responseDtoPage, createUri, specification, pageable));
+        return ResponseEntity.ok(this.baseHateoasService.addActionsInFindAll(responseDtoPage, createUri, specification, pageable));
     }
 
     @GetMapping("/{entityId}")
     public ResponseEntity<ResponseDtoWithActions<ID>> findById(@PathVariable ID entityId) {
         _checkBaseServiceNotNull();
         BaseResponseDto<ID> result = baseService.findById(entityId);
-        return ResponseEntity.ok(this.hateaosService.addActionsInFindById(result, _createUriList(entityId)));
+        return ResponseEntity.ok(this.baseHateoasService.addActionsInFindById(result, _createUriList(entityId)));
     }
 
     @PostMapping

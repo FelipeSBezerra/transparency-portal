@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
  * @param <Resp> Type of the response DTO.
  * @param <S>    Type of the specification used in the service, if applicable.
  */
-public interface HateoasService<ID, Resp, S> {
+public interface BaseHateoasService<ID, Resp, S> {
 
     public ResponseDtoWithActions<ID> addActionsInFindById(BaseResponseDto<ID> baseResponseDto, UriList uriList);
     public PagedModelWithActions<Resp> addActionsInFindAll(Page<Resp> responseDtoPage, String createUri, S specification, Pageable pageable);
