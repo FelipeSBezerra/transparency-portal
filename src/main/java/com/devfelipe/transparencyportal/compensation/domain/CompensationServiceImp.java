@@ -11,6 +11,7 @@ import com.devfelipe.transparencyportal.employee.domain.EmployeeService;
 import com.devfelipe.transparencyportal.employee.domain.model.Employee;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -53,5 +54,6 @@ public class CompensationServiceImp extends BaseServiceImp<Compensation, UUID, C
         savedCompensation.setIndemnityBenefits(compensationRequestDto.indemnityBenefits());
         savedCompensation.setLegalDeductions(compensationRequestDto.legalDeductions());
         savedCompensation.setMiscellaneousDeduction(compensationRequestDto.miscellaneousDeduction());
+        savedCompensation.setUpdatedAt(Instant.now());
     }
 }
