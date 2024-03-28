@@ -1,6 +1,11 @@
 # Readme da API do Portal da Transparência Simplificado em Spring (Java)
 
-Em desenvolvimento
+**===== Em desenvolvimento =====**
+
+## Acesse a documentação da API para conferir as funcionalidade atuais no link abaixo:
+
+[Documentação da API do Portal da Transparência Simplificado](https://documenter.getpostman.com/view/26431503/2sA35G2M8x)
+
 
 ## Descrição
 
@@ -23,7 +28,7 @@ A API foi desenvolvida utilizando as seguintes tecnologias:
 	- **Spring Data JPA**: Facilita o acesso a dados relacionais usando a plataforma Java 	Persistence API (JPA);
 	- **Spring HATEOAS**: Para a implementação do princípio HATEOAS (Hypermedia as the Engine of Application State), tornando o serviço RESTful.
 	- **Spring Web (MVC)**: Facilita o desenvolvimento de aplicativos web baseados em Java;
-	- **Spring Security**: Para gerenciamento de autenticação e autorização;
+	- **Spring Security**: Para gerenciamento de autenticação e autorização (***ainda não implementado***);
 - **Hibernate**: Framework ORM para mapeamento objeto-relacional.
 - **PostgreSQL**: Banco de dados utilizado para a persistência dos dados.
 - **Lombok**: Biblioteca Java utilizada para reduzir a verbosidade do código, automatizando a geração de getters, setters, construtores e outros métodos comuns.
